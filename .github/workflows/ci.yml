@@ -30,14 +30,15 @@ jobs:
               run: |
                 source /opt/ros/humble/setup.bash
                 source install/setup.bash
-                ./build/deployment_pkg/test_battery_monitor
+                ./build/deployment_pkg/test_battery_monitor_unit
               shell: bash         
 
-
-            - name: Run node (smoke test)
+            - name: Run integration test
               run: |
                 source /opt/ros/humble/setup.bash
                 source install/setup.bash
-                timeout 5 ros2 run deployment_pkg battery_monitor || true
+                ros2 run deployment_pkg battery_monitor &
+                sleep 1
+                ./build/deployment_pkg/test_battery_monitor_integration
               shell: bash
 

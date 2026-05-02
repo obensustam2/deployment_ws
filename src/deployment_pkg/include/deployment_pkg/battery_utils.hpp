@@ -3,7 +3,7 @@
 // Pure functions — easy to test
 float calculate_percentage(float battery_level)
 {
-  return battery_level / 1.0f;
+  return battery_level / 100.0f;
 }
 
 float calculate_voltage(float percentage)
