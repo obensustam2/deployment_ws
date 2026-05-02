@@ -30,7 +30,7 @@ jobs:
               run: |
                 source /opt/ros/humble/setup.bash
                 source install/setup.bash
-                ~/Projects/deployment_ws/build/deployment_pkg/test_battery_monitor
+                ./build/deployment_pkg/test_battery_monitor
               shell: bash         
 
 
