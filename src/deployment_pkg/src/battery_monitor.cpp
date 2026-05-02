@@ -11,7 +11,7 @@ private:
         sensor_msgs::msg::BatteryState msg;
         msg.header.stamp = this->now();
         msg.percentage = battery_level_ / 100.0f;
-        msg.voltage = 30.0f * msg.percentage;
+        msg.voltage = 24.0f * msg.percentage;
         msg.present = true;
         RCLCPP_INFO_STREAM(this->get_logger(), "Battery voltage: " << msg.voltage);
 
