@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.8)
 project(deployment_pkg)
 
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
+include_directories(include)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -23,6 +26,10 @@ if(BUILD_TESTING)
   set(ament_cmake_copyright_FOUND TRUE)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(test_battery_monitor test/test_battery_monitor.cpp)
+  ament_target_dependencies(test_battery_monitor rclcpp sensor_msgs)
 endif()
 
 ament_package()
