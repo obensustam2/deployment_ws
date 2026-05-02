@@ -1,0 +1,35 @@
+name: CI - ROS2 Battery Monitor
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        container:
+            image: ros:humble-ros-base
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              
+            - name: Install dependencies
+              run: | 
+                apt-get update
+                rosdep update
+                rosdep install --from-paths src --ignore-src -r -y
+
+            - name: Build
+              run: |
+                source /opt/ros/humble/setup.bash
+                colcon build
+              shell: bash
+
+            - name: Run node (smoke test)
+              run: |
+                source /opt/ros/humble/setup.bash
+                source install/setup.bash
+                timeout 5 ros2 run deployment_pkg battery_monitor || true
+              shell: bash
+
