@@ -28,8 +28,14 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 
   find_package(ament_cmake_gtest REQUIRED)
-  ament_add_gtest(test_battery_monitor test/test_battery_monitor.cpp)
-  ament_target_dependencies(test_battery_monitor rclcpp sensor_msgs)
+
+  # unit test
+  ament_add_gtest(test_battery_monitor_unit test/test_battery_monitor_unit.cpp)
+  ament_target_dependencies(test_battery_monitor_unit rclcpp sensor_msgs)
+
+  # integration test
+  ament_add_gtest(test_battery_monitor_integration test/test_battery_monitor_integration.cpp)
+  ament_target_dependencies(test_battery_monitor_integration rclcpp sensor_msgs)
 endif()
 
 ament_package()
