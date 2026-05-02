@@ -26,6 +26,14 @@ jobs:
                 colcon build
               shell: bash
 
+            - name: Run unit tests
+              run: |
+                source /opt/ros/humble/setup.bash
+                source install/setup.bash
+                ~/Projects/deployment_ws/build/deployment_pkg/test_battery_monitor
+              shell: bash         
+
+
             - name: Run node (smoke test)
               run: |
                 source /opt/ros/humble/setup.bash
