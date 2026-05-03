@@ -1,0 +1,9 @@
+- hosts: robots
+  become: true
+
+  tasks:
+    - name: Stop and disable hello-test service
+      systemd:
+        name: hello-test
+        enabled: false
+        state: stopped
