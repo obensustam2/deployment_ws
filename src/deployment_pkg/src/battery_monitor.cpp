@@ -17,7 +17,7 @@ private:
     msg.percentage = calculate_percentage(battery_level_);
     msg.voltage = calculate_voltage(msg.percentage);
     msg.present = true;
-    msg.temperature = 10.0;
+    msg.temperature = 15.0;
     RCLCPP_INFO_STREAM(this->get_logger(), "Battery voltage: " << msg.voltage);
 
     if (is_low_battery(battery_level_)) {
