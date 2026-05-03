@@ -1,0 +1,24 @@
+- hosts: robots
+  become: true
+
+  tasks:
+    - name: Create a dummy service
+      copy:
+        dest: /etc/systemd/system/hello-test.service
+        content: |
+          [Unit]
+          Description=Hello Test Service
+
+          [Service]
+          ExecStart=/bin/bash -c "while true; do echo hello; sleep 5; done"
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable and start it
+      systemd:
+        name: hello-test
+        enabled: true
+        state: started
+        daemon_reload: true

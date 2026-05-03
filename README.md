@@ -16,11 +16,14 @@ docker pull <image_url>
 
 ### Docker Container
 ```sh
-# list running docker containers (ps = process status)
-docker ps
+# list all docker containers (ps = process status, -a = all)
+docker ps -a
 
-# run docker container with specific name (-it, bash = interactive terminal)
+# run docker container with specific name first time (-it, bash = interactive terminal)
 docker run -it --name <container_name> <image name> bash
+
+# run docker container
+docker run -it <container_name> bash
 
 # stop all running containers
 docker stop <container_name>
@@ -35,3 +38,30 @@ docker container prune
 docker exec -it <container name> bash
 ```
 
+
+## Ansible
+### Installation
+```sh
+pip install ansible
+sudo apt install openssh-server
+```
+
+### Execution
+```sh
+ansible-playbook -i inventory.ini <desired_playbook>
+```
+
+
+## Prometheus
+```sh
+ros2 run deployment_pkg battery_state_monitor
+
+python3 src/deployment_pkg/scripts/battery_exporter.py
+
+docker run -d \
+  --name prometheus \
+  --add-host=host.docker.internal:host-gateway \
+  -p 9091:9090 \
+  -v ~/Projects/deployment_ws/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+  prom/prometheus
+```
