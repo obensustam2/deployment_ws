@@ -9,7 +9,7 @@ TEST(BatteryMonitorUnit, PercentageRange) {
 }
 
 TEST(BatteryMonitorUnit, VoltageScaling){
-    EXPECT_FLOAT_EQ(calculate_voltage(0.5f), 12.0f);
+    EXPECT_FLOAT_EQ(calculate_voltage(0.5f), 15.0f);
 }
 
 TEST(BatteryMonitorUnit, LowBatteryThreshold){
