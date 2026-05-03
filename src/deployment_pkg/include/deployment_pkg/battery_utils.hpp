@@ -8,7 +8,7 @@ float calculate_percentage(float battery_level)
 
 float calculate_voltage(float percentage)
 {
-  return 24.0f * percentage;
+  return 30.0f * percentage;
 }
 
 bool is_low_battery(float battery_level)
