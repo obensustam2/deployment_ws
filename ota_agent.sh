@@ -5,7 +5,7 @@ CONTAINER_NAME="battery-monitor"
 CHECK_INTERVAL=30
 HEALTH_WAIT=10
 
-echo "OTA agent started - watching $IMAGE"
+echo "OTA2 agent started - watching $IMAGE"
 
 check_health() {
     echo "Waiting $HEALTH_WAIT seconds for node to start..."
