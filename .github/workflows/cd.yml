@@ -9,7 +9,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}/battery-monitor
 
 jobs:
-  cd:
+  build-and-push-image-to-container-registry:
     name: Build and push Docker image
     runs-on: ubuntu-latest
 
