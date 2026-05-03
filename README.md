@@ -19,16 +19,19 @@ docker pull <image_url>
 # list running docker containers (ps = process status)
 docker ps
 
-# run docker container (-it, bash = interactive terminal)
-docker run -it <image name> bash
+# run docker container with specific name (-it, bash = interactive terminal)
+docker run -it --name <container_name> <image name> bash
 
 # stop all running containers
-docker stop $(docker ps -q)
+docker stop <container_name>
 
 # remove docker container (rm = remove)
 docker rm <container name>
 
 # remove all docker containers
 docker container prune
+
+# access running container with terminal
+docker exec -it <container name> bash
 ```
 

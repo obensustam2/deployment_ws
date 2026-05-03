@@ -13,7 +13,7 @@ check_health() {
 
     TOPIC=$(docker exec $CONTAINER_NAME \
         /bin/bash -c "source /opt/ros/humble/setup.bash && ros2 topic list 2>/dev/null" \
-        | grep "battery_state")
+        | grep "battery_state_fail")
 
     echo "Topic found: $TOPIC"
 
