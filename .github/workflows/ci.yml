@@ -1,44 +1,43 @@
 name: CI - ROS2 Battery Monitor
 
 on:
-    pull_request:
-        branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
-        container:
-            image: ros:humble-ros-base
+  build-and-test:
+    runs-on: ubuntu-latest
+    container:
+      image: ros:humble-ros-base
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-              
-            - name: Install dependencies
-              run: | 
-                apt-get update
-                rosdep update
-                rosdep install --from-paths src --ignore-src -r -y
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Build
-              run: |
-                source /opt/ros/humble/setup.bash
-                colcon build
-              shell: bash
+      - name: Install dependencies
+        run: |
+          apt-get update
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y
 
-            - name: Run unit tests
-              run: |
-                source /opt/ros/humble/setup.bash
-                source install/setup.bash
-                ./build/deployment_pkg/test_battery_monitor_unit
-              shell: bash         
+      - name: Build
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon build
 
-            - name: Run integration test
-              run: |
-                source /opt/ros/humble/setup.bash
-                source install/setup.bash
-                ros2 run deployment_pkg battery_monitor &
-                sleep 1
-                ./build/deployment_pkg/test_battery_monitor_integration
-              shell: bash
+      - name: Run unit tests
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          source install/setup.bash
+          ./build/deployment_pkg/test_battery_monitor_unit
 
+      - name: Run integration test
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          source install/setup.bash
+          ros2 run deployment_pkg battery_monitor &
+          sleep 1
+          ./build/deployment_pkg/test_battery_monitor_integration

@@ -3,19 +3,35 @@
 IMAGE="ghcr.io/obensustam2/deployment_ws/battery-monitor"
 CONTAINER_NAME="battery-monitor"
 CHECK_INTERVAL=30
+HEALTH_WAIT=10
 
 echo "OTA agent started - watching $IMAGE"
+
+check_health() {
+    echo "Waiting $HEALTH_WAIT seconds for node to start..."
+    sleep $HEALTH_WAIT
+
+    TOPIC=$(docker exec $CONTAINER_NAME \
+        /bin/bash -c "source /opt/ros/humble/setup.bash && ros2 topic list 2>/dev/null" \
+        | grep "battery_state")
+
+    echo "Topic found: $TOPIC"
+
+    if [ -n "$TOPIC" ]; then
+        echo "Health check PASSED ✅ — topic is publishing"
+        return 0
+    else
+        echo "Health check FAILED ❌ — topic not found"
+        return 1
+    fi
+}
 
 while true; do
     echo "Checking for new image..."
 
-    # pull latest image from registry
     docker pull $IMAGE:latest
 
-    # get the image ID from currently running container
     RUNNING_ID=$(docker inspect --format='{{.Image}}' $CONTAINER_NAME 2>/dev/null)
-
-    # get the image ID of latest pulled image
     LATEST_ID=$(docker inspect --format='{{.Id}}' $IMAGE:latest)
 
     echo "Running ID: $RUNNING_ID"
@@ -30,9 +46,13 @@ while true; do
         docker run -d \
             --name $CONTAINER_NAME \
             --restart unless-stopped \
-            $IMAGE
+            $IMAGE:latest
 
-        echo "Update complete — new version running"
+        if check_health; then
+            echo "Update complete — new version running ✅"
+        else
+            echo "Update failed — needs rollback ⚠️"
+        fi
     else
         echo "Already on latest — no update needed"
     fi
