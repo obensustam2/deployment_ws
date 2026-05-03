@@ -5,7 +5,7 @@ CONTAINER_NAME="battery-monitor"
 CHECK_INTERVAL=30
 HEALTH_WAIT=10
 
-echo "OTA2 agent started - watching $IMAGE"
+echo "OTA agent started - watching $IMAGE"
 
 check_health() {
     echo "Waiting $HEALTH_WAIT seconds for node to start..."
@@ -26,6 +26,21 @@ check_health() {
     fi
 }
 
+rollback() {
+    local old_image=$1  # receive old image ID as argument
+    echo "Rolling back to previous version: $old_image"
+
+    docker stop $CONTAINER_NAME 2>/dev/null
+    docker rm $CONTAINER_NAME 2>/dev/null
+
+    docker run -d \
+        --name $CONTAINER_NAME \
+        --restart unless-stopped \
+        $old_image
+
+    echo "Rollback complete — running previous version ✅"
+}
+
 while true; do
     echo "Checking for new image..."
 
@@ -40,6 +55,10 @@ while true; do
     if [ "$RUNNING_ID" != "$LATEST_ID" ]; then
         echo "New image detected — updating..."
 
+        # save old image ID before stopping
+        OLD_IMAGE=$(docker inspect --format='{{.Image}}' $CONTAINER_NAME 2>/dev/null)
+        echo "Saving old image ID: $OLD_IMAGE"
+
         docker stop $CONTAINER_NAME 2>/dev/null
         docker rm $CONTAINER_NAME 2>/dev/null
 
@@ -51,7 +70,8 @@ while true; do
         if check_health; then
             echo "Update complete — new version running ✅"
         else
-            echo "Update failed — needs rollback ⚠️"
+            echo "Health check failed — rolling back ⚠️"
+            rollback $OLD_IMAGE
         fi
     else
         echo "Already on latest — no update needed"
