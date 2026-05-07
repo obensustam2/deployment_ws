@@ -19,7 +19,7 @@ docker pull <image_url>
 # list all docker containers (ps = process status, -a = all)
 docker ps -a
 
-# run docker container with specific name first time (-it, bash = interactive terminal)
+# run docker container with specific name first time (-it, bash = interactive terminal but ignores the CMD on Dockerfile)
 docker run -it --name <container_name> <image name> bash
 
 # run docker container
